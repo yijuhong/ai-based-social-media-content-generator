@@ -1,0 +1,1086 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PRD | AI 기반 소셜 미디어 콘텐츠 자동 생성</title>
+  <style>
+    :root {
+      --bg: #f7f9fc;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #5f6b7a;
+      --line: #d9e1ec;
+      --soft: #f3f6fa;
+      --blue: #1f6feb;
+      --blue-soft: #eaf2ff;
+      --navy: #102a43;
+      --green: #177245;
+      --green-soft: #eaf7ef;
+      --amber: #9a6700;
+      --amber-soft: #fff4d6;
+      --red: #b42318;
+      --red-soft: #fff1f0;
+      --radius: 8px;
+      --shadow: 0 14px 40px rgba(23, 32, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      width: min(1160px, calc(100% - 32px));
+      margin: 32px auto 56px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 44px 48px 34px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+    }
+
+    .eyebrow,
+    .section-kicker {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 880px;
+      font-size: 34px;
+      font-weight: 850;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 850;
+    }
+
+    h3 {
+      margin-bottom: 10px;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    ul,
+    ol {
+      margin: 0 0 12px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #f2f5f9;
+      color: #243b53;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    .lead {
+      max-width: 880px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .meta-grid,
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+      display: grid;
+      gap: 14px;
+    }
+
+    .meta-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 28px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .meta-card,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .meta-card {
+      padding: 14px 16px;
+    }
+
+    .meta-card span {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .meta-card strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    nav {
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    main {
+      padding: 0 48px 48px;
+    }
+
+    section {
+      padding: 38px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.7fr);
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    .section-summary {
+      margin: 0;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel.soft {
+      background: #fbfdff;
+    }
+
+    .panel.accent {
+      border-color: #b8d4ff;
+      background: var(--blue-soft);
+    }
+
+    .panel.success {
+      border-color: #b9dfc8;
+      background: var(--green-soft);
+    }
+
+    .panel.warning {
+      border-color: #efd58b;
+      background: var(--amber-soft);
+    }
+
+    .panel.danger {
+      border-color: #ffd0cc;
+      background: var(--red-soft);
+    }
+
+    .panel p:last-child,
+    .panel ul:last-child,
+    .panel ol:last-child {
+      margin-bottom: 0;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tag,
+    .status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tag {
+      min-height: 28px;
+      padding: 4px 9px;
+      color: var(--muted);
+    }
+
+    .tag.blue {
+      border-color: #b8d4ff;
+      color: #174ea6;
+      background: var(--blue-soft);
+    }
+
+    .tag.green {
+      border-color: #b9dfc8;
+      color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .tag.amber {
+      border-color: #efd58b;
+      color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #ffffff;
+      font-size: 14px;
+    }
+
+    thead {
+      background: var(--soft);
+    }
+
+    th,
+    td {
+      padding: 12px 13px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td:first-child {
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      counter-reset: flow-step;
+    }
+
+    .flow-step {
+      position: relative;
+      min-height: 142px;
+      padding: 18px 16px 16px;
+      border: 1px solid #cfe0f7;
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .flow-step::before {
+      counter-increment: flow-step;
+      content: counter(flow-step);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 12px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .flow-step::after {
+      content: "→";
+      position: absolute;
+      top: 58px;
+      right: -14px;
+      width: 14px;
+      color: var(--blue);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .flow-step:nth-child(4)::after,
+    .flow-step:last-child::after {
+      content: "";
+    }
+
+    .flow-step h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .flow-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .status-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .status {
+      min-height: 30px;
+      padding: 5px 10px;
+      color: var(--ink);
+    }
+
+    .status.requested {
+      border-color: #b8d4ff;
+      background: var(--blue-soft);
+      color: #174ea6;
+    }
+
+    .status.running {
+      border-color: #efd58b;
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .status.done {
+      border-color: #b9dfc8;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status.partial {
+      border-color: #ffd0cc;
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .platform-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5eaf1;
+      font-size: 14px;
+    }
+
+    .metric:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .metric strong {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .tone-compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .score {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .score strong {
+      display: block;
+      color: var(--navy);
+      font-size: 13px;
+    }
+
+    .score span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .callout {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+    }
+
+    .callout strong {
+      display: block;
+      min-width: 92px;
+      color: var(--blue);
+      font-size: 13px;
+    }
+
+    .callout p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-note {
+      padding: 22px 48px;
+      border-top: 1px solid var(--line);
+      background: #f8fafc;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 960px) {
+      .page {
+        width: min(100% - 20px, 760px);
+        margin-top: 16px;
+      }
+
+      header,
+      nav,
+      main,
+      .footer-note {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .meta-grid,
+      .grid-4,
+      .grid-3,
+      .flow,
+      .score-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-head {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .flow-step:nth-child(2)::after,
+      .flow-step:nth-child(4)::after {
+        content: "";
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        font-size: 15px;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+      }
+
+      header,
+      nav,
+      main,
+      .footer-note {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      header {
+        padding-top: 32px;
+      }
+
+      .meta-grid,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .flow,
+      .tone-compare,
+      .score-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-step::after {
+        content: "";
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      td,
+      th {
+        min-width: 140px;
+        white-space: normal;
+      }
+
+      .callout {
+        display: block;
+      }
+
+      .callout strong {
+        margin-bottom: 6px;
+      }
+
+      .section-summary br {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <p class="eyebrow">Product Requirements Document</p>
+      <h1>AI 기반 소셜 미디어 콘텐츠 자동 생성</h1>
+      <p class="lead">
+        하나의 주제와 선택 키워드를 입력하면 Make와 Notion을 중심으로 Instagram, 네이버 블로그,
+        Threads용 콘텐츠와 대표 이미지를 자동 생성하고 Notion 초안으로 정리하는 노코드 자동화 시스템이다.
+      </p>
+      <div class="meta-grid" aria-label="문서 메타 정보">
+        <div class="meta-card"><span>프로젝트</span><strong>Project C</strong></div>
+        <div class="meta-card"><span>문서 유형</span><strong>팀 실행용 PRD</strong></div>
+        <div class="meta-card"><span>구현 방식</span><strong>Make + Notion</strong></div>
+        <div class="meta-card"><span>범위</span><strong>초안 자동 저장</strong></div>
+      </div>
+    </header>
+
+    <nav aria-label="문서 목차">
+      <ul>
+        <li><a href="#summary">미션 요약</a></li>
+        <li><a href="#problem">문제 정의</a></li>
+        <li><a href="#goals">목표</a></li>
+        <li><a href="#workflow">워크플로우</a></li>
+        <li><a href="#notion">Notion 구조</a></li>
+        <li><a href="#rules">생성 규칙</a></li>
+        <li><a href="#ab-test">A/B 테스트</a></li>
+        <li><a href="#deliverables">산출물</a></li>
+        <li><a href="#acceptance">인수조건</a></li>
+        <li><a href="#constraints">제약·리스크</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section id="summary">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Summary</p>
+            <h2>미션 요약</h2>
+          </div>
+          <p class="section-summary">
+            반복적인 멀티채널 콘텐츠 변환 작업을 자동화하여<br>
+            팀이 기획, 검수, 캠페인 개선에 더 많은 시간을 쓰도록 한다.
+          </p>
+        </div>
+        <div class="grid-3">
+          <article class="panel accent">
+            <h3>입력</h3>
+            <p>Notion 단일 DB에 <code>주제</code>를 필수로 입력하고 <code>키워드</code>는 선택 입력한다.</p>
+          </article>
+          <article class="panel accent">
+            <h3>생성</h3>
+            <p>Make AI Toolkit으로 플랫폼별 텍스트를 만들고 Cloudflare Workers AI HTTP 엔드포인트로 대표 이미지를 생성한다.</p>
+          </article>
+          <article class="panel accent">
+            <h3>저장</h3>
+            <p>생성 결과는 자동 게시하지 않고 Notion 페이지 본문과 첨부 파일로 저장한다.</p>
+          </article>
+        </div>
+        <div class="tag-row" aria-label="핵심 범위">
+          <span class="tag blue">노코드 자동화</span>
+          <span class="tag blue">Notion 초안 저장</span>
+          <span class="tag green">A/B 톤 생성</span>
+          <span class="tag green">공통 대표 이미지 1장</span>
+          <span class="tag amber">자동 게시 제외</span>
+          <span class="tag amber">자동 품질 검수 제외</span>
+        </div>
+      </section>
+
+      <section id="problem">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Problem</p>
+            <h2>문제 정의</h2>
+          </div>
+          <p class="section-summary">
+            같은 주제를 플랫폼마다 다시 쓰는 과정은 단순 반복이지만,<br>
+            글자 수와 톤앤매너, 이미지 활용 방식이 달라 자동화 설계가 필요하다.
+          </p>
+        </div>
+        <div class="grid-2">
+          <article class="panel">
+            <h3>현재 문제</h3>
+            <ul>
+              <li>Instagram, 블로그, Threads에 맞춰 같은 메시지를 반복 작성한다.</li>
+              <li>플랫폼별 분량, 해시태그, 문체 기준이 달라 작업 시간이 늘어난다.</li>
+              <li>결과물이 흩어져 팀원이 비교, 수정, 제출 상태를 파악하기 어렵다.</li>
+              <li>이미지 생성 결과와 텍스트 결과가 분리되어 최종 산출물 정리가 번거롭다.</li>
+            </ul>
+          </article>
+          <article class="panel">
+            <h3>해결 방향</h3>
+            <ul>
+              <li>Notion DB를 콘텐츠 요청과 결과 저장의 단일 작업 공간으로 사용한다.</li>
+              <li>Make가 상태값을 감지해 텍스트 생성, 이미지 생성, 파일 변환, Notion 저장을 순차 실행한다.</li>
+              <li>A/B 톤 결과를 한 페이지에서 비교해 팀이 수동으로 최종 판단한다.</li>
+              <li>자동 게시를 제외해 저작권, 브랜드, 플랫폼 정책 리스크를 낮춘다.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="goals">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Goals</p>
+            <h2>목표</h2>
+          </div>
+          <p class="section-summary">
+            팀 프로젝트에서 실제 구현 가능한 자동화 범위를 명확히 하고,<br>
+            최종 제출물의 구조와 성공 조건을 정의한다.
+          </p>
+        </div>
+        <div class="grid-4">
+          <article class="panel soft">
+            <h3>워크플로우 설명 가능</h3>
+            <p>하나의 주제가 플랫폼별 콘텐츠로 변환되고 Notion에 저장되는 흐름을 팀원이 설명할 수 있다.</p>
+          </article>
+          <article class="panel soft">
+            <h3>텍스트+이미지 자동화</h3>
+            <p>GPT 기반 텍스트 생성과 이미지 생성 AI 호출을 Make에서 연결한다.</p>
+          </article>
+          <article class="panel soft">
+            <h3>플랫폼별 포맷 반영</h3>
+            <p>분량, 태그, 문체, 제목 구조 등 플랫폼별 콘텐츠 요구사항을 프롬프트 설계에 반영한다.</p>
+          </article>
+          <article class="panel soft">
+            <h3>결과 중앙화</h3>
+            <p>생성 결과, 오류, A/B 평가를 Notion 단일 DB와 페이지 본문에서 확인한다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="workflow">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Workflow</p>
+            <h2>자동화 워크플로우</h2>
+          </div>
+          <p class="section-summary">
+            버튼 클릭 자체가 외부 게시를 수행하지 않는다.<br>
+            상태값 변경이 Make 실행의 트리거가 되고, 결과는 Notion 초안으로 저장된다.
+          </p>
+        </div>
+        <div class="flow" aria-label="자동화 흐름">
+          <article class="flow-step">
+            <h3>Notion 입력</h3>
+            <p>사용자가 단일 DB에 주제와 선택 키워드를 입력하고 버튼으로 Status를 생성요청으로 변경한다.</p>
+          </article>
+          <article class="flow-step">
+            <h3>Make 감지</h3>
+            <p>Make가 생성요청 상태의 행을 감지하고 Status를 생성중으로 변경한 뒤 시나리오를 시작한다.</p>
+          </article>
+          <article class="flow-step">
+            <h3>텍스트 생성</h3>
+            <p>Make AI Toolkit이 Instagram, 네이버 블로그, Threads 결과를 친근함과 전문적 톤으로 생성한다.</p>
+          </article>
+          <article class="flow-step">
+            <h3>이미지 생성</h3>
+            <p>Cloudflare Workers AI HTTP 엔드포인트가 1:1 대표 이미지를 Base64 응답으로 반환한다.</p>
+          </article>
+          <article class="flow-step">
+            <h3>파일 변환</h3>
+            <p>Make가 Base64 값을 이미지 파일로 변환하고 Notion 페이지 첨부에 사용할 수 있는 형태로 준비한다.</p>
+          </article>
+          <article class="flow-step">
+            <h3>본문 저장</h3>
+            <p>플랫폼별 A/B 결과와 이미지 첨부를 같은 Notion 페이지 본문에 섹션으로 저장한다.</p>
+          </article>
+          <article class="flow-step">
+            <h3>상태 업데이트</h3>
+            <p>모든 단계가 성공하면 완료, 이미지 단계만 실패하면 부분완료와 오류 메시지를 기록한다.</p>
+          </article>
+          <article class="flow-step">
+            <h3>팀 수동 확인</h3>
+            <p>담당자가 Notion 페이지와 Make 실행 화면을 직접 확인하고 A/B 평가와 결론을 작성한다.</p>
+          </article>
+        </div>
+        <div class="status-line" aria-label="상태값">
+          <span class="status">대기</span>
+          <span class="status requested">생성요청</span>
+          <span class="status running">생성중</span>
+          <span class="status done">완료</span>
+          <span class="status partial">부분완료</span>
+          <span class="status partial">실패</span>
+        </div>
+      </section>
+
+      <section id="notion">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Interface</p>
+            <h2>Notion DB 구조</h2>
+          </div>
+          <p class="section-summary">
+            단일 DB를 사용하되 긴 결과물은 속성이 아니라<br>
+            페이지 본문에 저장해 가독성과 관리성을 유지한다.
+          </p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>속성명</th>
+              <th>유형</th>
+              <th>필수 여부</th>
+              <th>설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>주제</td><td>Title</td><td>필수</td><td>콘텐츠 생성의 중심 주제. 주제만 있어도 실행 가능해야 한다.</td></tr>
+            <tr><td>키워드</td><td>Text</td><td>선택</td><td>SEO, 해시태그, 본문 맥락에 반영할 보조 키워드 목록.</td></tr>
+            <tr><td>Status</td><td>Select</td><td>필수</td><td><code>대기</code>, <code>생성요청</code>, <code>생성중</code>, <code>부분완료</code>, <code>완료</code>, <code>실패</code>.</td></tr>
+            <tr><td>실행 요청</td><td>Button</td><td>필수</td><td>클릭 시 Status를 <code>생성요청</code>으로 변경한다.</td></tr>
+            <tr><td>대표 이미지</td><td>Files</td><td>자동 입력</td><td>Make가 Base64 이미지를 파일로 변환해 첨부한다.</td></tr>
+            <tr><td>A/B 평가 결과</td><td>Select 또는 Text</td><td>수동 입력</td><td>팀원이 친근함 또는 전문적 콘텐츠안 중 우수안을 기록한다.</td></tr>
+            <tr><td>오류 메시지</td><td>Text</td><td>자동 입력</td><td>부분완료 또는 실패 시 실패 단계와 원인을 기록한다.</td></tr>
+            <tr><td>실행 시각</td><td>Date</td><td>자동 입력</td><td>Make 시나리오가 실행을 시작하거나 완료한 시각.</td></tr>
+          </tbody>
+        </table>
+        <div class="grid-2" style="margin-top: 14px;">
+          <article class="panel soft">
+            <h3>페이지 본문 구성</h3>
+            <ol>
+              <li>프로젝트 개요</li>
+              <li>입력값 요약</li>
+              <li>A안: 친근함</li>
+              <li>B안: 전문적</li>
+              <li>대표 이미지</li>
+              <li>A/B 수동 평가</li>
+              <li>프롬프트 수정 기록</li>
+            </ol>
+          </article>
+          <article class="panel soft">
+            <h3>부분완료 기준</h3>
+            <p>텍스트 생성과 Notion 본문 저장은 성공했지만 이미지 생성, Base64 변환, Notion 첨부 중 하나가 실패한 경우 텍스트 결과를 유지하고 Status를 <code>부분완료</code>로 기록한다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="rules">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Content Rules</p>
+            <h2>플랫폼별 생성 규칙</h2>
+          </div>
+          <p class="section-summary">
+            프롬프트 전문은 PRD에 고정하지 않는다.<br>
+            대신 구현자가 지켜야 할 출력 요구사항과 수정 기록 양식을 정의한다.
+          </p>
+        </div>
+        <div class="grid-3">
+          <article class="panel platform-card">
+            <h3>Instagram</h3>
+            <div class="metric"><strong>형식</strong><span>짧은 캡션 + 해시태그</span></div>
+            <div class="metric"><strong>분량</strong><span>캡션 50-100자</span></div>
+            <div class="metric"><strong>태그</strong><span>해시태그 최대 5개</span></div>
+            <div class="metric"><strong>톤</strong><span>친근함, 전문적 두 톤</span></div>
+          </article>
+          <article class="panel platform-card">
+            <h3>네이버 블로그</h3>
+            <div class="metric"><strong>형식</strong><span>제목 + 소제목 + 본문</span></div>
+            <div class="metric"><strong>분량</strong><span>본문 500자 이상</span></div>
+            <div class="metric"><strong>키워드</strong><span>선택 키워드를 자연스럽게 반영</span></div>
+            <div class="metric"><strong>톤</strong><span>검색형 문맥과 읽기 쉬운 문장</span></div>
+          </article>
+          <article class="panel platform-card">
+            <h3>Threads</h3>
+            <div class="metric"><strong>형식</strong><span>단일 게시글</span></div>
+            <div class="metric"><strong>분량</strong><span>500자 이내</span></div>
+            <div class="metric"><strong>태그</strong><span>태그 1개 기준</span></div>
+            <div class="metric"><strong>톤</strong><span>대화형 문장, 핵심 메시지 우선</span></div>
+          </article>
+        </div>
+        <div class="grid-2" style="margin-top: 14px;">
+          <article class="panel success">
+            <h3>대표 이미지 요구사항</h3>
+            <ul>
+              <li>콘텐츠 주제를 시각적으로 설명하는 공통 대표 이미지 1장 생성.</li>
+              <li>기본 비율은 1:1, 기준 크기는 1080px.</li>
+              <li>실제 게시 전 사람이 저작권, 브랜드 적합성, 민감 요소를 검토한다.</li>
+              <li>결과는 Base64 응답을 Make에서 파일로 변환한 뒤 Notion에 첨부한다.</li>
+            </ul>
+          </article>
+          <article class="panel warning">
+            <h3>프롬프트 기록 요구사항</h3>
+            <ul>
+              <li>플랫폼별 프롬프트 설계 의도와 출력 조건을 기록한다.</li>
+              <li>초안, 수정안, 최종안의 변경 사유를 남긴다.</li>
+              <li>프롬프트 전문은 별도 문서 또는 Notion 페이지에 관리할 수 있다.</li>
+              <li>PRD에는 전체 프롬프트 문안이 아니라 설계 기준만 포함한다.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="ab-test">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Bonus</p>
+            <h2>A/B 테스트</h2>
+          </div>
+          <p class="section-summary">
+            보너스 과제 범위에 포함하되 자동 성과 예측은 하지 않는다.<br>
+            두 톤의 결과를 생성하고 팀이 수동으로 비교한다.
+          </p>
+        </div>
+        <div class="tone-compare">
+          <article class="panel">
+            <h3>A안: 친근함</h3>
+            <p>말을 건네는 듯한 문장, 쉬운 표현, 공감형 메시지를 사용한다. Instagram과 Threads에서 참여 유도에 적합하다.</p>
+            <div class="tag-row">
+              <span class="tag green">대화형</span>
+              <span class="tag green">공감</span>
+              <span class="tag green">가벼운 CTA</span>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>B안: 전문적</h3>
+            <p>근거와 구조가 분명한 문장, 정보형 제목, 명확한 요약을 사용한다. 네이버 블로그와 B2B 문맥에 적합하다.</p>
+            <div class="tag-row">
+              <span class="tag blue">정보형</span>
+              <span class="tag blue">신뢰감</span>
+              <span class="tag blue">구조화</span>
+            </div>
+          </article>
+        </div>
+        <div class="panel soft" style="margin-top: 14px;">
+          <h3>수동 평가 기준</h3>
+          <p>팀원은 Notion 페이지에서 두 톤의 결과를 읽고 플랫폼별 적합성과 실제 활용 가능성을 평가한다.</p>
+          <div class="score-grid">
+            <div class="score"><strong>채널 적합성</strong><span>플랫폼 문법과 사용 맥락에 맞는가</span></div>
+            <div class="score"><strong>명확성</strong><span>핵심 메시지가 빠르게 이해되는가</span></div>
+            <div class="score"><strong>CTA</strong><span>사용자 행동 유도가 자연스러운가</span></div>
+            <div class="score"><strong>브랜드 안전성</strong><span>과장, 저작권, 민감 표현 리스크가 낮은가</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="deliverables">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Deliverables</p>
+            <h2>최종 산출물</h2>
+          </div>
+          <p class="section-summary">
+            제출물은 자동화 구조, 플랫폼별 결과물,<br>
+            프롬프트 설계 기록을 모두 포함해야 한다.
+          </p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>산출물</th>
+              <th>포함 항목</th>
+              <th>완료 기준</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>자동화 워크플로우</td><td>Make 시나리오, 단계별 역할, 연결 구조 설명</td><td>주제 입력부터 Notion 저장까지 실행 흐름이 설명 가능</td></tr>
+            <tr><td>플랫폼별 콘텐츠 결과물</td><td>Instagram, 네이버 블로그, Threads 텍스트와 대표 이미지 1장</td><td>A/B 톤별 결과가 Notion 페이지 본문에 정리됨</td></tr>
+            <tr><td>협업 도구 페이지</td><td>프로젝트 개요, 팀 구성원 역할, 개인별 작업 요약, 결과물</td><td>Notion 단일 DB와 페이지에서 확인 가능</td></tr>
+            <tr><td>프롬프트 템플릿 문서</td><td>플랫폼별 설계 기준, 초안→수정→최종 기록</td><td>변경 사유와 최종 적용 기준이 남아 있음</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="acceptance">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Acceptance</p>
+            <h2>인수조건</h2>
+          </div>
+          <p class="section-summary">
+            아래 조건은 자동화된 로컬 테스트가 아니라<br>
+            Notion, Make, Cloudflare Workers AI가 연결된 뒤 담당자가 수동으로 확인하는 기준이다.
+          </p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>조건</th>
+              <th>수동 확인 방법</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>AC-01</td><td>Notion에서 <code>주제</code>만 입력한 뒤 버튼을 클릭하면 <code>Status = 생성요청</code>으로 바뀌고 Make 실행이 시작되어야 한다.</td><td>담당자가 Notion 행의 상태값과 Make 실행 화면을 직접 확인한다.</td></tr>
+            <tr><td>AC-02</td><td><code>주제 + 키워드</code> 입력 후 실행하면 Instagram, 네이버 블로그, Threads 결과가 A/B 톤별로 같은 Notion 페이지 본문에 저장되어야 한다.</td><td>담당자가 Notion 페이지 본문에서 플랫폼별 섹션과 A/B 섹션을 직접 확인한다.</td></tr>
+            <tr><td>AC-03</td><td>Cloudflare Workers AI의 Base64 이미지 응답은 Make에서 파일로 변환되어 Notion 페이지 첨부로 표시되어야 한다.</td><td>담당자가 Make의 파일 변환 단계와 Notion 첨부 영역을 직접 확인한다.</td></tr>
+            <tr><td>AC-04</td><td>이미지 단계가 실패해도 생성된 텍스트 결과는 유지되고, 상태는 <code>부분완료</code>, 오류 메시지는 이미지 단계 실패 사유로 기록되어야 한다.</td><td>담당자가 실패 케이스 실행 후 Notion의 텍스트 결과, 상태값, 오류 메시지를 직접 확인한다.</td></tr>
+            <tr><td>AC-05</td><td>인수조건 검증은 별도 증거 파일이나 캡처 저장 없이 사람이 매뉴얼하게 확인한다.</td><td>담당자가 Notion 페이지와 Make 실행 화면을 보고 통과 여부를 판단한다.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="constraints">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Constraints</p>
+            <h2>제약·리스크</h2>
+          </div>
+          <p class="section-summary">
+            본 프로젝트는 자동화 경험과 산출물 정리에 초점을 맞추며,<br>
+            게시와 자동 품질 판단은 의도적으로 제외한다.
+          </p>
+        </div>
+        <div class="grid-2">
+          <article class="panel danger">
+            <h3>금지 사항</h3>
+            <ul>
+              <li>저작권 문제가 있는 콘텐츠를 실제 소셜 미디어에 무단 게시하지 않는다.</li>
+              <li>타인의 콘텐츠를 복사해 제출하지 않는다.</li>
+              <li>AI 생성 결과를 사람 검토 없이 브랜드 공식 콘텐츠로 사용하지 않는다.</li>
+            </ul>
+          </article>
+          <article class="panel warning">
+            <h3>제외 범위</h3>
+            <ul>
+              <li>Instagram, 네이버 블로그, Threads API 직접 게시.</li>
+              <li>AI 기반 자동 품질 검수와 자동 우수안 선정.</li>
+              <li>머신 파싱용 JSON 스펙 임베드.</li>
+              <li>세부 일정표와 사용자/팀 역할 섹션.</li>
+            </ul>
+          </article>
+        </div>
+        <div class="callout" style="margin-top: 14px;">
+          <strong>참고 기준</strong>
+          <p>
+            Instagram 해시태그 5개와 Threads 태그 1개 기준은 최근 플랫폼 변화 참고값으로 반영한다.
+            관련 참고 링크:
+            <a href="https://www.theverge.com/news/847739/instagram-hashtag-spam-limit">Instagram hashtag limit</a>,
+            <a href="https://www.theverge.com/news/770391/meta-threads-text-dumps-attachments-10000-characters">Threads text format reference</a>.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-note">
+      본 PRD는 팀 실행과 코딩 에이전트의 요구사항 분석을 동시에 고려한 구현 기준 문서다.
+      외부 서비스 연결 정보, 실제 API 키, 계정 권한은 포함하지 않는다.
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,10 +1,10 @@
-# AI 기반 소셜 미디어 콘텐츠 생성
+### AI 기반 소셜 미디어 콘텐츠 생성
 
-## ⛵ 협업 Notion
+#### ⛵ 협업 Notion
 
 [B2-3 텀프로젝트 9조 | 팀스페이스](https://www.notion.so/my-ws/B2-3-9-387608ae2c7f803b9ac5cabdc97f283d?source=copy_link)
 
-## 📁 Repository Tree
+#### 📁 Repository Tree
 
 ```markdown
 .

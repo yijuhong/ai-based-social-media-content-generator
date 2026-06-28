@@ -838,7 +838,7 @@
             <ol>
               <li><code>## 컨텐츠 브리프</code> 섹션에 브리프 JSON 코드 블록 작성</li>
               <li><code>## 인스타그램</code> 섹션에 Instagram 결과 JSON 코드 블록 작성</li>
-              <li><code>## 네이버 블로그</code> 섹션에 네이버 블로그 결과 JSON 코드 블록 작성</li>
+              <li><code>## 네이버 블로그</code> 섹션에 최종 <code>content</code> 1,800자 이내의 네이버 블로그 결과 JSON 코드 블록 작성</li>
               <li><code>## 스레드</code> 섹션에 Threads 결과 JSON 코드 블록 작성</li>
             </ol>
           </article>
@@ -874,7 +874,7 @@
           <article class="panel platform-card">
             <h3>네이버 블로그</h3>
             <div class="metric"><strong>형식</strong><span>제목 + 소제목 + 본문</span></div>
-            <div class="metric"><strong>분량</strong><span>본문 1,500~2,500자 내외(정보가 적으면 더 짧게 가능)</span></div>
+            <div class="metric"><strong>분량</strong><span>최종 content 전체 1,800자 이내</span></div>
             <div class="metric"><strong>주제/키워드</strong><span>본문 맥락과 검색형 문맥에 자연스럽게 반영</span></div>
             <div class="metric"><strong>톤</strong><span>선택 톤을 유지하되 읽기 쉬운 문장 사용</span></div>
           </article>
@@ -1057,9 +1057,11 @@
           <strong>참고 기준</strong>
           <p>
             Instagram 해시태그 5개와 Threads 해시태그 0~3개 기준은 최근 플랫폼 변화 참고값으로 반영한다.
+            네이버 블로그 분량은 Notion API의 단일 rich text <code>text.content</code> 2,000자 제한을 고려해 1,800자 이내로 제한한다.
             관련 참고 링크:
             <a href="https://www.theverge.com/news/847739/instagram-hashtag-spam-limit">Instagram hashtag limit</a>,
-            <a href="https://www.theverge.com/news/770391/meta-threads-text-dumps-attachments-10000-characters">Threads text format reference</a>.
+            <a href="https://www.theverge.com/news/770391/meta-threads-text-dumps-attachments-10000-characters">Threads text format reference</a>,
+            <a href="https://developers.notion.com/reference/request-limits">Notion request limits</a>.
           </p>
         </div>
       </section>
